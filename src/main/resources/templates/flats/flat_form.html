@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Create/Edit Flat</title>
+  <link rel="stylesheet" th:href="@{/css/styles.css}" />
+  <script>
+    function toggleResidentOptions() {
+        const ownership = document.getElementById("ownershipStatus").value;
+        const residentSection = document.getElementById("residentOptions");
+        residentSection.style.display = (ownership === 'Owned') ? 'block' : 'none';
+    }
+  </script>
+</head>
+<body>
+<header th:replace="fragments/header :: header"></header>
+
+<div style="margin: 20px;">
+  <h2 th:text="${flat.id == null} ? 'Create New Flat' : 'Edit Flat'"></h2>
+
+  <form th:action="@{/flats/save}" th:object="${flat}" method="post">
+    <input type="hidden" th:field="*{id}" />
+
+    <label>Block Name:</label>
+    <select th:field="*{blockName}" required>
+      <option value="">-- Select Block --</option>
+      <option th:each="b : ${#numbers.sequence('A','Z')}" th:value="${b}" th:text="${b}"></option>
+    </select><br/>
+
+    <label>Flat Number:</label>
+    <input type="text" th:field="*{flatNumber}" required /><br/>
+
+    <label>Flat Type:</label>
+    <select th:field="*{type}" required>
+      <option value="">-- Select Type --</option>
+      <option value="1BHK">1BHK</option>
+      <option value="2BHK">2BHK</option>
+      <option value="3BHK">3BHK</option>
+    </select><br/>
+
+    <label>Area (sqft):</label>
+    <input type="number" step="0.1" th:field="*{area}" required /><br/>
+
+    <label>Ownership Status:</label>
+    <select th:field="*{ownershipStatus}" id="ownershipStatus" onchange="toggleResidentOptions()" required>
+      <option value="">-- Select --</option>
+      <option value="Owned">Owned</option>
+      <option value="Unowned">Unowned</option>
+    </select><br/>
+
+    <label>Parking Slot:</label>
+    <input type="checkbox" th:field="*{parkingAvailable}" /> Available<br/>
+
+    <!-- Resident Selection Section -->
+    <div id="residentOptions" style="margin-top: 15px; display: none;">
+      <strong>If Owned, associate with:</strong><br/>
+      <label><input type="radio" name="newResident" value="false" checked /> Existing Resident</label>
+      <select name="existingResidentId">
+        <option value="">-- Select Resident --</option>
+        <option th:each="r : ${residents}" th:value="${r.id}" th:text="${r.fullName}"></option>
+      </select><br/>
+
+      <label><input type="radio" name="newResident" value="true" /> New Resident</label><br/>
+    </div>
+
+    <button type="submit">Save</button>
+    <a href="/flats">Cancel</a>
+  </form>
+</div>
+
+<script>
+  // Initialize visibility based on pre-selected ownership status
+  window.onload = toggleResidentOptions;
+</script>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Resident Directory</title>
+  <link rel="stylesheet" th:href="@{/css/styles.css}" />
+</head>
+<body>
+<header th:replace="fragments/header :: header"></header>
+
+<div style="margin: 20px;">
+  <div style="display: flex; justify-content: space-between; align-items: center;">
+    <h2>Resident Directory</h2>
+    <div>
+      <a href="/flats" style="margin-right: 10px;">Manage Flats</a>
+      <a href="/residents/create">Create New Resident</a>
+    </div>
+  </div>
+
+  <form action="#" method="get" style="margin-top: 15px; margin-bottom: 25px; display: flex; gap: 10px;">
+    <input type="text" name="name" placeholder="Search by name" />
+    <select name="occupancy">
+      <option value="">All Occupancy Status</option>
+      <option value="Owner">Owner</option>
+      <option value="Tenant">Tenant</option>
+      <option value="Vacant">Vacant</option>
+    </select>
+    <button type="submit">Filter</button>
+  </form>
+
+  <table border="1" width="100%" cellpadding="8" cellspacing="0">
+    <thead>
+    <tr>
+      <th>Name</th>
+      <th>Owned Flat(s)</th>
+      <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="resident : ${residents}">
+      <td th:text="${resident.fullName}">John Doe</td>
+      <td>
+        <ul style="margin: 0; padding-left: 20px;">
+          <li th:each="flat : ${resident.ownedFlats}" th:text="${flat.blockName + '-' + flat.flatNumber}"></li>
+        </ul>
+      </td>
+      <td>
+        <a th:href="@{'/residents/view/' + ${resident.id}}">View Details</a>
+      </td>
+    </tr>
+    <tr th:if="${#lists.isEmpty(residents)}">
+      <td colspan="3" style="text-align: center; font-style: italic;">No residents found.</td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>

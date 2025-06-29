@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Flat Listings</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}" />
+</head>
+<body>
+<header th:replace="fragments/header :: header"></header>
+
+<div style="margin: 20px;">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h2>Flat Directory</h2>
+        <div>
+            <a href="/residents" style="margin-right: 10px;">Manage Residents</a>
+            <a href="/flats/create">Create New Flat</a>
+        </div>
+    </div>
+
+    <form action="#" method="get" style="margin-top: 15px; margin-bottom: 25px; display: flex; gap: 10px;">
+        <select name="block">
+            <option value="">All Blocks</option>
+            <option th:each="b : ${#numbers.sequence('A','Z')}" th:value="${b}" th:text="${b}"></option>
+        </select>
+        <select name="ownership">
+            <option value="">All Ownerships</option>
+            <option value="Owned">Owned</option>
+            <option value="Unowned">Unowned</option>
+        </select>
+        <button type="submit">Filter</button>
+    </form>
+
+    <table border="1" width="100%" cellpadding="8" cellspacing="0">
+        <thead>
+        <tr>
+            <th>Block</th>
+            <th>Flat Number</th>
+            <th>Ownership Status</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="flat : ${flats}">
+            <td th:text="${flat.blockName}">A</td>
+            <td th:text="${flat.flatNumber}">101</td>
+            <td th:text="${flat.ownershipStatus}">Owned</td>
+            <td>
+                <a th:href="@{'/flats/view/' + ${flat.id}}">View Details</a>
+            </td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(flats)}">
+            <td colspan="4" style="text-align: center; font-style: italic;">No flats found.</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

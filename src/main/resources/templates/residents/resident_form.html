@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Create/Edit Resident</title>
+  <link rel="stylesheet" th:href="@{/css/styles.css}" />
+</head>
+<body>
+<header th:replace="fragments/header :: header"></header>
+
+<div style="margin: 20px;">
+  <h2 th:text="${resident.id == null} ? 'Create New Resident' : 'Edit Resident'"></h2>
+
+  <form th:action="@{/residents/save}" th:object="${resident}" method="post">
+    <input type="hidden" th:field="*{id}" />
+
+    <!-- Optional: For ownership assignment to a flat -->
+    <input type="hidden" name="flatId" th:value="${flatId}" th:if="${flatId != null}" />
+
+    <label>Full Name:</label>
+    <input type="text" th:field="*{fullName}" required /><br/>
+
+    <label>Primary Contact:</label>
+    <input type="text" th:field="*{primaryContact}" required /><br/>
+
+    <label>Email:</label>
+    <input type="email" th:field="*{email}" /><br/>
+
+    <label>Date of Purchase:</label>
+    <input type="date" th:field="*{dateOfPurchase}" /><br/>
+
+    <label>Occupancy Status:</label>
+    <select th:field="*{occupancyStatus}" required>
+      <option value="">-- Select --</option>
+      <option value="Owner">Owner</option>
+      <option value="Tenant">Tenant</option>
+      <option value="Vacant">Vacant</option>
+    </select><br/>
+
+    <fieldset style="margin-top: 20px;">
+      <legend>Emergency Contact</legend>
+      <label>Name:</label>
+      <input type="text" th:field="*{emergencyContact.name}" /><br/>
+
+      <label>Relationship:</label>
+      <input type="text" th:field="*{emergencyContact.relationship}" /><br/>
+
+      <label>Contact Number:</label>
+      <input type="text" th:field="*{emergencyContact.contactNumber}" /><br/>
+    </fieldset>
+
+    <button type="submit">Save</button>
+    <a href="/residents">Cancel</a>
+  </form>
+</div>
+</body>
+</html>
