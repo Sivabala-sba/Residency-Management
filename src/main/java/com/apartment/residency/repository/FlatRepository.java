@@ -11,4 +11,5 @@ public interface FlatRepository extends JpaRepository<Flat, Long> {
     List<Flat> findByOwnershipStatus(String ownershipStatus);
     List<Flat> findByResident(Resident resident);
     List<Flat> findByBlockNameAndOwnershipStatus(String blockName, String ownershipStatus);
+    long countByType(String type);
 }
