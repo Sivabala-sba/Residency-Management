@@ -49,27 +49,27 @@ public class FlatController {
     @PostMapping("/save")
     public String saveFlat(@ModelAttribute Flat flat,
                            @RequestParam(required = false) Long existingResidentId,
-                           @RequestParam(required = false) boolean newResident){
+                           @RequestParam(required = false) boolean newResident) {
 
         boolean owned = "Owned".equalsIgnoreCase(flat.getOwnershipStatus());
 
-        if(owned){
-            if(newResident){
-                // Redirect to new resident creation flow with flat context
-                //(to be handled with a session attribute or query param)
-                return "redirect:/residents/create?flatId=" + flat.getId();
-            } else if(existingResidentId != null){
+        if (owned) {
+            if (newResident) {
+                Flat savedFlat = flatRepository.save(flat); // Save flat first
+                return "redirect:/residents/create?flatId=" + savedFlat.getId();
+            } else if (existingResidentId != null) {
                 Resident resident = residentRepository.findById(existingResidentId)
                         .orElseThrow(() -> new IllegalArgumentException("Invalid resident ID: " + existingResidentId));
                 flat.setResident(resident);
             }
-        } else{
+        } else {
             flat.setResident(null);
         }
 
         flatRepository.save(flat);
         return "redirect:/flats";
     }
+
 
     @GetMapping("/view/{id}")
     public String viewFlat(@PathVariable Long id, Model model){
@@ -89,7 +89,7 @@ public class FlatController {
         Flat flat = flatRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid flat ID: " + id));
         model.addAttribute("flat", flat);
-        model.addAttribute("resident", residentRepository.findAll());
+        model.addAttribute("residents", residentRepository.findAll());
         return "flats/flat_form";
     }
 

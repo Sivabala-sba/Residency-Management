@@ -4,6 +4,33 @@
     <meta charset="UTF-8">
     <title>Flat Listings</title>
     <link rel="stylesheet" th:href="@{/css/styles.css}" />
+
+    <style>
+        .header {
+            background-color: #f0f0f0;
+            padding: 12px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #ccc;
+            font-family: sans-serif;
+        }
+        .header a {
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+        }
+        .header-title {
+            font-size: 1.5em;
+            color: #2e3c58;
+        }
+        .datetime {
+            font-size: 0.9em;
+            color: #666;
+        }
+    </style>
+
+
 </head>
 <body>
 <header th:replace="fragments/header :: header"></header>
@@ -20,7 +47,10 @@
     <form action="#" method="get" style="margin-top: 15px; margin-bottom: 25px; display: flex; gap: 10px;">
         <select name="block">
             <option value="">All Blocks</option>
-            <option th:each="b : ${#numbers.sequence('A','Z')}" th:value="${b}" th:text="${b}"></option>
+            <!--<option th:each="b : ${#numbers.sequence('A','Z')}" th:value="${b}" th:text="${b}"></option>-->
+            <option value="A">A</option>
+            <option value="B">B</option>
+            <option value="C">C</option>
         </select>
         <select name="ownership">
             <option value="">All Ownerships</option>
@@ -54,5 +84,17 @@
         </tbody>
     </table>
 </div>
+
+<script>
+    function updateDateTime() {
+        const now = new Date();
+        const formatted = now.toLocaleString();
+        document.getElementById('datetime').textContent = formatted;
+    }
+    updateDateTime();
+    setInterval(updateDateTime, 60000);
+</script>
+
+
 </body>
 </html>

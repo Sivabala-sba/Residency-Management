@@ -4,6 +4,32 @@
   <meta charset="UTF-8">
   <title>Flat Details</title>
   <link rel="stylesheet" th:href="@{/css/styles.css}" />
+
+  <style>
+    .header {
+        background-color: #f0f0f0;
+        padding: 12px 24px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #ccc;
+        font-family: sans-serif;
+    }
+    .header a {
+        text-decoration: none;
+        color: #333;
+        font-weight: bold;
+    }
+    .header-title {
+        font-size: 1.5em;
+        color: #2e3c58;
+    }
+    .datetime {
+        font-size: 0.9em;
+        color: #666;
+    }
+  </style>
+
 </head>
 <body>
 <header th:replace="fragments/header :: header"></header>
@@ -29,12 +55,9 @@
       <tr><th>Email</th><td th:text="${resident.email}"></td></tr>
       <tr><th>Date of Purchase</th><td th:text="${resident.dateOfPurchase}"></td></tr>
       <tr><th>Occupancy Status</th><td th:text="${resident.occupancyStatus}"></td></tr>
-      <tr><th>Emergency Contact</th>
-        <td>
-                        <span th:text="${resident.emergencyContact.name} + ' ('
-                                      + resident.emergencyContact.relationship + ') - '
-                                      + resident.emergencyContact.contactNumber}"></span>
-        </td>
+      <tr th:if="${resident.emergencyContact != null}">
+        <th>Emergency Contact</th>
+        <td th:text="${resident.emergencyContact.name + ' (' + resident.emergencyContact.relationship + ') - ' + resident.emergencyContact.contactNumber}"></td>
       </tr>
     </table>
   </div>
@@ -45,5 +68,16 @@
     <a href="/flats" style="margin-left: 20px;">Back to Flat List</a>
   </div>
 </div>
+
+<script>
+  function updateDateTime() {
+      const now = new Date();
+      const formatted = now.toLocaleString();
+      document.getElementById('datetime').textContent = formatted;
+  }
+  updateDateTime();
+  setInterval(updateDateTime, 60000);
+</script>
+
 </body>
 </html>

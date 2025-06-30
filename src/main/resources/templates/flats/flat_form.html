@@ -4,6 +4,32 @@
   <meta charset="UTF-8">
   <title>Create/Edit Flat</title>
   <link rel="stylesheet" th:href="@{/css/styles.css}" />
+
+  <style>
+    .header {
+        background-color: #f0f0f0;
+        padding: 12px 24px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #ccc;
+        font-family: sans-serif;
+    }
+    .header a {
+        text-decoration: none;
+        color: #333;
+        font-weight: bold;
+    }
+    .header-title {
+        font-size: 1.5em;
+        color: #2e3c58;
+    }
+    .datetime {
+        font-size: 0.9em;
+        color: #666;
+    }
+  </style>
+
   <script>
     function toggleResidentOptions() {
         const ownership = document.getElementById("ownershipStatus").value;
@@ -24,7 +50,10 @@
     <label>Block Name:</label>
     <select th:field="*{blockName}" required>
       <option value="">-- Select Block --</option>
-      <option th:each="b : ${#numbers.sequence('A','Z')}" th:value="${b}" th:text="${b}"></option>
+      <!--<option th:each="b : ${#numbers.sequence('A','Z')}" th:value="${b}" th:text="${b}"></option>-->
+      <option value="A">A</option>
+      <option value="B">B</option>
+      <option value="C">C</option>
     </select><br/>
 
     <label>Flat Number:</label>
@@ -72,5 +101,16 @@
   // Initialize visibility based on pre-selected ownership status
   window.onload = toggleResidentOptions;
 </script>
+
+<script>
+  function updateDateTime() {
+      const now = new Date();
+      const formatted = now.toLocaleString();
+      document.getElementById('datetime').textContent = formatted;
+  }
+  updateDateTime();
+  setInterval(updateDateTime, 60000);
+</script>
+
 </body>
 </html>
